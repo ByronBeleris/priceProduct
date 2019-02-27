@@ -1,6 +1,7 @@
 <?php namespace App\Models\Objects\ViewModels;
 
 use App\Models\Objects\Entities\Account;
+use App\Models\Objects\Entities\Price;
 use App\Models\Objects\Entities\Product;
 
 /**
@@ -12,12 +13,13 @@ class ProductViewModel
 {
     public $Id;
     public $Sku;
-    public $AccountName;
-    public $AccountId;
+    public $AccountName = null;
+    public $AccountNumber = null;
     public $Name;
     public $Description;
     public $Price;
-    public $InDatabase;
+    public $InDatabase = false;
+    public $InLive = false;
 
     /**
      * ProductViewModel constructor.
@@ -30,16 +32,42 @@ class ProductViewModel
      * Map ProductViewModel from a product and an account
      *
      * @param Product $product
-     * @param Account $account
+     * @param $liveMinPrice
+     * @param Price|null $dbMinPrice
      * @return void
      */
-    public function Map(Product $product, Account $account = null)
+    public function Map(Product $product, $liveMinPrice, $dbMinPrice)
     {
         $this->Id = $product->GetId();
         $this->Sku = $product->GetSku();
-        $this->AccountName = is_null($account) ? null : $account->GetName();
-        $this->AccountId = is_null($account) ? null : $account->GetId();
         $this->Name = $product->GetName();
         $this->Description = $product->GetDescription();
+        $this->SetPriceAndInDatabaseValue($product, $liveMinPrice, $dbMinPrice);
+    }
+
+
+    /**
+     * Sets the price and if the value is in database or in live
+     *
+     * @param Product $product
+     * @param mixed $liveMinPrice
+     * @param Price|null $dbMinPrice
+     */
+    private function SetPriceAndInDatabaseValue(Product $product, $liveMinPrice, $dbMinPrice)
+    {
+        if (is_null($dbMinPrice) && is_null($liveMinPrice)) {
+            $this->Price = $product->GetPrice();
+        } elseif (!is_null($dbMinPrice)) {
+            $this->Price = $dbMinPrice->GetValue();
+            $this->InDatabase = true;
+        } elseif (is_null($dbMinPrice)) {
+            $this->Price = $liveMinPrice['price'];
+            $this->InLive = true;
+        } else {
+            $check = $dbMinPrice->GetValue() >= $liveMinPrice['price'];
+            $this->Price = $check ? $dbMinPrice->GetValue() : $liveMinPrice['price'];
+            $this->InDatabase = $check;
+            $this->InLive = !$check;
+        }
     }
 }

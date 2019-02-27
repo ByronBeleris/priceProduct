@@ -85,12 +85,12 @@ class DtPriceRepository implements IPriceRepository
     /**
      * Gets the min price from given product sku and account Id
      *
-     * @param array $productSku
-     * @param int|null $accountId
-     * @return Price|mixed
+     * @param mixed $productSku
+     * @param mixed $accountNumber
+     * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function GetMinPriceByProductsAndAccount(array $productSku, $accountId = null)
+    public function GetMinPriceByProductAndAccount( $productSku, $accountNumber = null)
     {
         $entityManager = $this->genericRepository->GetEntityManager();
         $entityName = $this->genericRepository->GetEntityName();
@@ -98,13 +98,13 @@ class DtPriceRepository implements IPriceRepository
             ->from($entityName, "price")
             ->leftJoin("price.product", "product")
             ->leftJoin("price.account", "account")
-            ->where('product.sku IN (:productSku)');
-        if (!is_null($accountId)) {
-            $query->andWhere('account.id = :accountId')
-                ->setParameter('accountId', $accountId);
+            ->where('product.sku = :productSku');
+        if (!is_null($accountNumber)) {
+            $query->andWhere('account.externalReference = :accountNumber')
+                ->setParameter('accountNumber', $accountNumber);
         }
         $query->setParameter('productSku', $productSku)
-            ->orderBy('product.price', 'ASC')
+            ->orderBy('price.value', 'ASC')
             ->setMaxResults(1);
         return $query->getQuery()->getOneOrNullResult();
     }

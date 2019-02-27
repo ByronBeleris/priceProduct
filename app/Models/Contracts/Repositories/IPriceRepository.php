@@ -56,10 +56,10 @@ interface IPriceRepository
     /**
      * Gets the min price from given product sku and account Id
      *
-     * @param array $productSku
-     * @param int|null $accountId
-     * @return Price|mixed
+     * @param mixed $productSku
+     * @param mixed $accountNumber
+     * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    function GetMinPriceByProductsAndAccount( array $productSku, $accountId = null );
+    function GetMinPriceByProductAndAccount( $productSku, $accountNumber = null);
 }

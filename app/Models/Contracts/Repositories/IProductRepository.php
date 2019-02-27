@@ -36,15 +36,6 @@ interface IProductRepository
      */
     function GetBySku( $sku );
 
-
-    /**
-     * Get all sku names based on the search term
-     *
-     * @param string $searchTerm
-     * @return array
-     */
-    function GetNamesForAutoComplete( $searchTerm );
-
     /**
      * Creates a Product
      *

@@ -16,7 +16,7 @@
                     <label>Account Id</label>
                 </div>
                 <div class="col-3">
-                    <input type="text" class="form-control" ng-model="products.accountId"/>
+                    <input type="text" class="form-control" ng-model="products.accountNumber"/>
                 </div>
                 <br>
             </div>
@@ -25,18 +25,35 @@
                 <button class="btn btn-success" ng-click="search()">Search</button>
             </div>
             <br>
-            <div class="row" ng-if="productModel != null">
-                <div class="jumbotron">
-                    <h1 class="display-4">@{{ productModel.Name }}</h1>
-                    <p class="lead">This price is from the <span ng-if="productModel.InDatabase">database.</span><span ng-if="!productModel.InDatabase">json file.</span></p>
-                    <p class="lead"><strong>Description:</strong>  @{{ productModel.Description }}</p>
-                    <hr class="my-4">
-                    <p><strong>SKU:</strong> @{{ productModel.Sku }}</p>
-                    <p><strong>Price:</strong> @{{ productModel.Price | number : 2  }}</p>
-                    <p><strong>Product Id:</strong> @{{ productModel.Id }}</p>
-                    <p ng-if="productModel.AccountId != null"><strong>Account Id:</strong> @{{ productModel.AccountId }}</p>
-                    <p ng-if="productModel.AccountName != null"><strong>Account Name:</strong> @{{ productModel.AccountName }}</p>
-                </div>
+            <div class="row" style="text-align: center" ng-if="productModels != null">
+                <table  class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>SKU</th>
+                        <th>Price</th>
+                        <th>AccountNumber</th>
+                        <th>AccountName</th>
+                        <th>Type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="model in productModels">
+                        <td>@{{ model.Id }}</td>
+                        <td>@{{ model.Name }}</td>
+                        <td>@{{ model.Description }}</td>
+                        <td>@{{ model.Sku}}</td>
+                        <td>@{{ model.Price | number : 2 }}</td>
+                        <td>@{{ model.AccountNumber}}</td>
+                        <td>@{{ model.AccountName }}</td>
+                        <td ng-if="!model.InDatabase && !model.InLive">Base Price</td>
+                        <td ng-if="model.InDatabase">Database Price</td>
+                        <td ng-if="model.InLive">Live Price</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             </div>
         </div>

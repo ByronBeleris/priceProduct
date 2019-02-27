@@ -39,13 +39,13 @@ class Price extends BaseEntityModel
 
     /**
      * @ORM\ManyToOne(targetEntity="Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="account_id", nullable=true, referencedColumnName="id")
      **/
     protected $account;
     
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", nullable=true, referencedColumnName="id")
      **/
     protected $user;
     
@@ -129,7 +129,7 @@ class Price extends BaseEntityModel
     /**
      * Gets price account
      *
-     * @return Account
+     * @return Account|null
      */
     public function GetAccount()
     {

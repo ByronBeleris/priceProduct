@@ -1,7 +1,7 @@
 angular.module('app').controller('ProductController', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     $scope.products = {
         productCodes: [],
-        accountId: ''
+        accountNumber: ''
     };
 
 
@@ -28,14 +28,14 @@ angular.module('app').controller('ProductController', ['$scope', '$http', '$time
             var result = $scope.products.productCodes.map(res => res.text);
             var data = {
                 products: result,
-                accountId: $scope.products.accountId
+                accountNumber: $scope.products.accountNumber
             };
             var response = $http.post(SearchProducts, data);
             response.then(function (data) {
-                $scope.productModel = null;
+                $scope.productModels = null;
                 if (data.data.Status === 'success') {
-                    $scope.productModel = data.data.Model;
-                    console.log($scope.productModel);
+                    $scope.productModels = data.data.Model;
+                    console.log($scope.productModels);
                 }
                 else
                 {

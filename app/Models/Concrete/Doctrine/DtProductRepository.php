@@ -84,19 +84,6 @@ class DtProductRepository implements IProductRepository
     }
 
     /**
-     * Get all sku names based on the search term
-     *
-     * @param string $searchTerm
-     * @return array
-     */
-    public function GetNamesForAutoComplete( $searchTerm )
-    {
-        $query = $this->genericRepository->GetEntityRepository()->createQuery("SELECT o.sku FROM products o WHERE o.sku like :searchterm")
-            ->setParameter(':searchTerm', $searchTerm);
-        return $query->GetResult();
-    }
-
-    /**
      * Deletes a product by id
      *
      * @param int $id
